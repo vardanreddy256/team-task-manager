@@ -12,13 +12,23 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ACCESS_TOKEN_TYPE = "access"
 REFRESH_TOKEN_TYPE = "refresh"
 
+# bcrypt has a hard 72-byte input limit. With passlib 1.7.4 + bcrypt 4.x this
+# raises ValueError instead of auto-truncating, so we do it ourselves.
+_BCRYPT_MAX_BYTES = 72
+
+
+def _truncate_for_bcrypt(password: str) -> str:
+    encoded = password.encode("utf-8")[:_BCRYPT_MAX_BYTES]
+    # If the cut landed mid-codepoint, errors="ignore" drops the partial bytes.
+    return encoded.decode("utf-8", errors="ignore")
+
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return pwd_context.hash(_truncate_for_bcrypt(password))
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    return pwd_context.verify(password, hashed)
+    return pwd_context.verify(_truncate_for_bcrypt(password), hashed)
 
 
 def _create_token(subject: str | int, token_type: str, expires_delta: timedelta) -> str:
