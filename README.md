@@ -2,8 +2,8 @@
 
 A full-stack web app where users sign up, create projects, invite teammates, assign tasks, and track progress with role-based access control (Admin / Member).
 
-- **Live URL:** _add your Railway frontend URL here after deploy_
-- **Demo video:** _add your demo video link here_
+- **Live URL: https://frontend-production-6a156.up.railway.app
+- **Demo video:https://drive.google.com/file/d/1Mh8QX-YkNfEiTg_Y5vm1wtdJ1Z1LP2Bw/view?usp=sharing
 
 ## Stack
 
